@@ -2,10 +2,9 @@
 
 **Researcher:** Pratham A Gowda ([@b14ckW0lf](https://github.com/b14ckW0lf))
 **Date:** August 2026
-**Status:** Vendor notified (responsible disclosure in progress) — not yet publicly disclosed
+**Status:** Vendor notified 
 **Affected Product:** Fire-Boltt BSW013 Smartwatch, Firmware V0.0.8
 
-> ⚠️ **Note on disclosure status:** This advisory documents responsible disclosure in progress. Update the status line above once the vendor patches the issue or the disclosure window expires, and consider keeping this repository private until then.
 
 ---
 
