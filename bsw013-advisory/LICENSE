@@ -1,0 +1,23 @@
+Creative Commons Attribution 4.0 International (CC BY 4.0)
+
+Copyright (c) 2026 Pratham A Gowda
+
+This work (the advisory text, images, and proof-of-concept code in this
+repository) is licensed under the Creative Commons Attribution 4.0
+International License. To view a copy of this license, visit
+https://creativecommons.org/licenses/by/4.0/
+
+You are free to:
+  - Share — copy and redistribute the material in any medium or format
+  - Adapt — remix, transform, and build upon the material
+  for any purpose, even commercially, under the following terms:
+
+  Attribution — You must give appropriate credit to the original
+  researcher (Pratham A Gowda / b14ckW0lf), provide a link to the
+  license, and indicate if changes were made.
+
+DISCLAIMER: The proof-of-concept code in this repository is provided for
+educational and defensive security research purposes only. It targets a
+specific consumer device (Fire-Boltt BSW013, firmware V0.0.8) that the
+researcher owned and tested. Do not use this code against devices you do
+not own or do not have explicit authorization to test.
