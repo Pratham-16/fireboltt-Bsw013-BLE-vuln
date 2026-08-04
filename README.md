@@ -1,8 +1,8 @@
 # Security Advisory: Unauthenticated BLE Command Injection in Fire-Boltt BSW013 Smartwatch
 
-**Researcher:** Pratham A Gowda ([@b14ckW0lf](https://github.com/b14ckW0lf))
-**Date:** August 2026
-**Status:** Vendor notified 
+**Researcher:** Pratham A Gowda (b14ckW0lf)<br>
+**Date:** August 2026 <br>
+**Status:** Vendor notified <br>
 **Affected Product:** Fire-Boltt BSW013 Smartwatch, Firmware V0.0.8
 
 
