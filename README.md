@@ -1,4 +1,5 @@
-# Security Advisory: Unauthenticated BLE Command Injection in Fire-Boltt BSW013 Smartwatch
+
+F# Security Advisory: Unauthenticated BLE Command Injection in Fire-Boltt BSW013 Smartwatch
 
 **Researcher:** Pratham A Gowda (b14ckW0lf)<br>
 **Date:** August 2026 <br>
@@ -111,11 +112,11 @@ Reverse-engineered packet format (all multi-byte fields big-endian unless noted)
 - Verified by testing 21 standard CRC16 variants across multiple candidate byte ranges against 25 independent real packets pulled from the capture.
 - CRC-16/ARC over `packet[6:]` matched 25/25 samples exactly.
 
-See [`poc/crc16_arc.py`](poc/crc16_arc.py) for the reference implementation.
+See [`poc/crc16_arc.py`](bsw013-advisory/poc/crc16_arc.py) for the reference implementation.
 
 ## 5. Proof of Concept
 
-Full runnable scripts are in [`/poc`](poc). All require [`bleak`](https://pypi.org/project/bleak/) (`pip install bleak`) and a target watch MAC address.
+Full runnable scripts are in [`/poc`](bsw013-advisory/poc). All require [`bleak`](https://pypi.org/project/bleak/) (`pip install bleak`) and a target watch MAC address.
 
 ### 5.1 Finding A: Unauthenticated Arbitrary Notification Injection (No User Interaction)
 
@@ -129,7 +130,7 @@ Full runnable scripts are in [`/poc`](poc). All require [`bleak`](https://pypi.o
 
 **Verification of arbitrary content control:** a new packet was constructed from scratch with original title/body text ("SECURITY TEST" / "This message was injected without pairing"), using the reverse-engineered checksum algorithm. This packet was accepted and displayed identically to a captured/replayed one, confirming full attacker control over displayed content — not limited to previously captured messages.
 
-Script: [`poc/finding_a_notification_injection.py`](poc/finding_a_notification_injection.py)
+Script: [`poc/finding_a_notification_injection.py`](bsw013-advisory/poc/finding_a_notification_injection.py)
 
 See Figures 1–2 in [Photographic Evidence](#photographic-evidence).
 
@@ -150,7 +151,7 @@ Tested and reproduced across 3 independent runs, capturing all three possible we
 
 Notably, throughout this exchange the underlying Bluetooth connection state remained **"Not Bonded"** (confirmed via nRF Connect), demonstrating that the watch's application-layer pairing dialog is disconnected from actual BLE-level bonding/authentication — the plaintext data is sent over the unbonded, unencrypted link regardless.
 
-Script: [`poc/finding_b_pair_prompt_trigger.py`](poc/finding_b_pair_prompt_trigger.py)
+Script: [`poc/finding_b_pair_prompt_trigger.py`](bsw013-advisory/poc/finding_b_pair_prompt_trigger.py)
 
 See Figures 3–4 in [Photographic Evidence](#photographic-evidence).
 
@@ -165,7 +166,7 @@ See Figures 3–4 in [Photographic Evidence](#photographic-evidence).
 
 Verified directly using nRF Connect from a connection that remained in the "Not Bonded" state throughout. No custom protocol reverse-engineering was needed — this uses the standard, publicly documented Bluetooth SIG Heart Rate Service; the vulnerability is purely the watch's failure to require bonding before permitting subscription.
 
-Script: [`poc/finding_c_heart_rate_disclosure.py`](poc/finding_c_heart_rate_disclosure.py)
+Script: [`poc/finding_c_heart_rate_disclosure.py`](bsw013-advisory/poc/finding_c_heart_rate_disclosure.py)
 
 > **Scope note:** data only streams while the wearer has heart rate monitoring actively running on the watch; it does not appear to expose a continuous passive background feed. Still a meaningful exposure, since many users leave on-demand HR monitoring running for extended periods (e.g. during exercise), during which any nearby attacker can silently read live readings.
 
@@ -208,34 +209,34 @@ See Figures 5–6 in [Photographic Evidence](#photographic-evidence).
 
 **Figure 1.** Captured/replayed real packet triggering a notification and vibration on the watch, with zero pairing or user interaction.
 
-![Figure 1](images/figure1-finding-a-notification-trigger.png)
+![Figure 1](bsw013-advisory/images/figure1-finding-a-notification-trigger.png)
 
 **Figure 2.** Custom, non-captured packet — original text ("SECURITY TEST… message was injected without pairing") constructed from scratch using the reverse-engineered protocol and checksum, confirming arbitrary attacker-controlled content, not just replay.
 
-![Figure 2](images/figure2-finding-a-custom-injection.png)
+![Figure 2](bsw013-advisory/images/figure2-finding-a-custom-injection.png)
 
 ### Finding B — Pairing-Triggered Information Disclosure
 
 **Figure 3.** The watch's native Pair confirmation prompt, triggered remotely from an unbonded attacker device sending the `IDENTITY_1` command.
 
-![Figure 3](images/figure3-finding-b-pair-prompt.png)
+![Figure 3](bsw013-advisory/images/figure3-finding-b-pair-prompt.png)
 
 **Figure 4.** Terminal output of the proof-of-concept script (`pair_popup.py`) that triggered the prompt shown in Figure 3, run from an independent Linux laptop with no prior pairing relationship to the watch.
 
-![Figure 4](images/figure4-finding-b-script-terminal.png)
+![Figure 4](bsw013-advisory/images/figure4-finding-b-script-terminal.png)
 
 ### Finding C — Unauthenticated Heart Rate Disclosure
 
 **Figure 5.** Phone Bluetooth settings showing the watch (`BSW013_Call`) as a separately bonded device on the researcher's own phone — included to establish the test environment; this bonded phone connection is distinct from, and unrelated to, the unbonded attacker connection used to capture heart rate data below.
 
-![Figure 5](images/figure5-finding-c-bluetooth-settings.png)
+![Figure 5](bsw013-advisory/images/figure5-finding-c-bluetooth-settings.png)
 
 **Figure 6.** nRF Connect log showing a live stream of real heart rate notifications (72–77 BPM, standard Heart Rate Measurement characteristic `00002a37`) received over a connection explicitly shown as "CONNECTED / NOT BONDED" — confirming this data is readable without any pairing or authentication.
 
-![Figure 6](images/figure6-finding-c-heart-rate-log.png)
+![Figure 6](bsw013-advisory/images/figure6-finding-c-heart-rate-log.png)
 
 ---
 
 ## License
 
-This advisory is released for informational and defensive security purposes. See [LICENSE](LICENSE) for terms.
+This advisory is released for informational and defensive security purposes. See [LICENSE](bsw013-advisory/LICENSE) for terms.
